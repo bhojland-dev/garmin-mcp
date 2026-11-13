@@ -63,13 +63,17 @@ async function getAccessToken(forceRefresh = false): Promise<string> {
 
 type Query = Record<string, string | number | boolean | undefined>;
 
-async function garminFetch(path: string, query: Query = {}): Promise<Response> {
+async function garminFetch(
+	path: string,
+	query: Query = {},
+	accept = "application/json",
+): Promise<Response> {
 	const url = new URL(path, BASE_URL);
 	for (const [k, v] of Object.entries(query)) {
 		if (v !== undefined && v !== "") url.searchParams.set(k, String(v));
 	}
 	const doFetch = (token: string) =>
-		fetch(url, { headers: { Authorization: `Bearer ${token}`, Accept: "application/json" } });
+		fetch(url, { headers: { Authorization: `Bearer ${token}`, Accept: accept } });
 
 	let res = await doFetch(await getAccessToken());
 	if (res.status === 401) {
@@ -131,7 +135,8 @@ export async function getActivityWorkouts(activityId: number) {
 
 /** Download the original activity file (a zip holding the FIT file) and return the FIT bytes. */
 async function downloadFit(activityId: number): Promise<Uint8Array> {
-	const res = await garminFetch(`/download-service/files/activity/${activityId}`);
+	// The download endpoint answers 406 if the client only accepts JSON.
+	const res = await garminFetch(`/download-service/files/activity/${activityId}`, {}, "*/*");
 	const bytes = new Uint8Array(await res.arrayBuffer());
 	// Zip files start with "PK".
 	if (bytes[0] === 0x50 && bytes[1] === 0x4b) {
