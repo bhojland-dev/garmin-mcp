@@ -1,0 +1,31 @@
+/**
+ * Wrangler configuration: https://developers.cloudflare.com/workers/wrangler/configuration/
+ *
+ * Secrets are set in the Cloudflare dashboard (Worker > Settings > Variables and Secrets),
+ * never in this file:
+ *   GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, COOKIE_ENCRYPTION_KEY, GARMIN_API_KEY
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "garmin-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    // The URL MCP clients connect to. Updated after the first deploy.
+    "MCP_RESOURCE": "https://garmin-mcp.example.workers.dev/mcp",
+    "ALLOWED_GITHUB_LOGIN": "bhojland-dev"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "OAUTH_KV",
+      "id": "b3473682f0934392bed49d06847d718e"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "dev": {
+    "port": 8788
+  }
+}
