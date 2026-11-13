@@ -12,8 +12,8 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    // The URL MCP clients connect to. Updated after the first deploy.
-    "MCP_RESOURCE": "https://garmin-mcp.example.workers.dev/mcp",
+    // The URL MCP clients connect to.
+    "MCP_RESOURCE": "https://garmin-mcp.bhojland.workers.dev/mcp",
     "ALLOWED_GITHUB_LOGIN": "bhojland-dev"
   },
   "kv_namespaces": [
